@@ -1,0 +1,22 @@
+// test.http
+@url=http://localhost:3222/api
+
+
+###
+POST {{url}}/register
+Content-Type: application/json
+{
+  "username": "user3",
+  "password": "123456"
+}
+
+
+# ### 个人信息
+# get {{url}}/profile
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTJhNjdhZDZiOGU4ZjBmNDZjNzVlZiIsImlhdCI6MTY1NDgyNzg0OH0.B48LSuBpnDEFg_fbNOtLzk3ZUMMT-GdGbzIR2-qwtMw
+
+
+# {
+#   "username": "user3",
+#   "password": "123456"
+# }
