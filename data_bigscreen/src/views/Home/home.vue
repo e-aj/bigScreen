@@ -11,8 +11,9 @@
           <div class="logout" @click="logout">退出</div>
         </div>
       </div>
-      <hr />
-      <div class="content"></div>
+      <div class="content">
+        <data1 />
+      </div>
     </div>
     <a-config-provider :locale="locale">
       <a-modal v-model:visible="visible" title="退出" @ok="handleOk">
@@ -23,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { onUnmounted, ref, reactive, onMounted, onBeforeMount } from "vue";
+import { onUnmounted, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { message } from "ant-design-vue";
 import zhCN from "ant-design-vue/es/locale/zh_CN";
@@ -31,12 +32,16 @@ import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 dayjs.locale("zh-cn");
 import { getInfo } from "../../api/user";
+import data1 from "../data/data.vue";
 
 interface navListType {
   title: string;
   path: string;
 }
 export default {
+  components: {
+    data1,
+  },
   setup() {
     const router = useRouter();
     let time = ref<string>(" ");
@@ -72,14 +77,27 @@ export default {
       }, 1000);
     };
 
+    // 补零操作
+    const fillZero = (num: any) => {
+      if ((num + "").length >= 2) {
+        return num;
+      } else {
+        return "0" + num;
+      }
+    };
     // 获取当前时间
     const getData = () => {
       const data = new Date();
-      time.value = `${data.getFullYear()}年${
-        data.getMonth() + 1
-      }月${data.getDate()}日 ${data.getHours()}:${data.getMinutes()}:${data.getSeconds()}`;
+      let year = fillZero(data.getFullYear());
+      let month = fillZero(data.getMonth() + 1);
+      let date = fillZero(data.getDate());
+      let hours = fillZero(data.getHours());
+      let minutes = fillZero(data.getMinutes());
+      let seconds = fillZero(data.getSeconds());
+      time.value = `${year}年${month}月${date}日 ${hours}:${minutes}:${seconds}`;
     };
     getData();
+
     setInterval(() => {
       getData();
     }, 1000);
@@ -111,41 +129,55 @@ export default {
   width: 100%;
   height: 100%;
   position: absolute;
+
   .bgImg {
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: -1;
   }
+
   .container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     .head {
       height: 60px;
       display: flex;
       justify-content: space-between;
       align-content: center;
-      margin: 0 20px;
+      padding: 0 20px;
+      border-bottom: 1px solid #fff;
+
       .time {
         color: #4172c2;
         font-size: 18px;
         line-height: 60px;
       }
+
       .title {
         color: #fff;
         font-size: 28px;
         line-height: 60px;
         margin-left: 50px;
       }
+
       .info {
         display: flex;
         justify-content: space-around;
         color: #4172c2;
         font-size: 18px;
         line-height: 60px;
+
         .logout {
           margin: 0 10px;
           cursor: pointer;
         }
       }
+    }
+
+    .content {
+      flex: 1;
     }
   }
 }

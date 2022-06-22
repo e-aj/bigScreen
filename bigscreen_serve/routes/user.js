@@ -54,7 +54,7 @@ module.exports = (app) => {
     );
     if (!isPasswordValid) {
       return res.send({
-        status:'000002',
+        status: "000002",
         message: "密码错误！",
       });
     }
@@ -68,21 +68,25 @@ module.exports = (app) => {
 
   // 根据用户名修改密码
   router.post("/updatepwd", async (req, res) => {
-      const user = await User.updateOne({
-        username: req.body.username,
-        password: req.body.password,
-      })
-      res.send('ok')
-      
+    const user = await User.updateOne({
+      username: req.body.username,
+      password: req.body.password,
+    });
+    res.send("ok");
   });
 
   // 根据token  获取用户信息
-router.get('/profile', async (req, res) => {
-  const raw = String(req.headers.authorization.split(' ').pop())
-  // 解密 token 获取对应的id
-  const { id } = jwt.verify(raw, SECRET)
-  req.user = await User.findById(id)
-  res.send(req.user)
-})
+  router.get("/profile", async (req, res) => {
+    const raw = String(req.headers.authorization.split(" ").pop());
+    // 解密 token 获取对应的id
+    const { id } = jwt.verify(raw, SECRET);
+    req.user = await User.findById(id);
+    res.send(req.user);
+  });
 
-}
+  // 获取用户列表
+  router.get("/userlist", async (req, res) => {
+    const user = await User.find();
+    res.send(user);
+  });
+};
